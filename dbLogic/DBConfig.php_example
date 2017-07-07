@@ -1,0 +1,10 @@
+<?php
+
+class DBConfig {
+    public $servername = "";
+    public $username = "";
+    public $password = "";
+    public $database = "";
+}
+
+?>

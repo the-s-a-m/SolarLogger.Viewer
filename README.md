@@ -1,0 +1,1 @@
+# SolarLogger.Viewer
