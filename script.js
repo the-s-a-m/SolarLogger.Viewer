@@ -191,7 +191,7 @@ $(document).ready(function() {
       var kwhAverage = 0;
 
       $.each(responseRows, function(key, row) {
-        var time = row.requesttime;
+        var time = row.requesttime.substring(0, 10);
         times.push(time);
 
         var devices = row.devices;
