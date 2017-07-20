@@ -8,13 +8,16 @@ $(document).ready(function() {
     $("#dayChartVoltageDC").hide();
     $("#dayChartCurrencyDC").hide();
     $("#dayChartCurrencyAC").hide();
-    
+    $("#dayChartCurrencyPowerAC").hide();
+
     if(this.value == "chartV_DC") {
       $("#dayChartVoltageDC").show();
     } else if(this.value == "chartI_DC") {
       $("#dayChartCurrencyDC").show();
     } else if(this.value == "chartI_AC") {
       $("#dayChartCurrencyAC").show();
+    } else if(this.value == "chartP_AC") {
+      $("#dayChartCurrencyPowerAC").show();
     }
   });
 
@@ -41,10 +44,12 @@ $(document).ready(function() {
     var kwh = [];
     var iDC = [];
     var temperature = [];
+    var powerAC = [];
 
-    var voltageDC = []
-    var currencyDC = []
-    var currencyAC = []
+    var voltageDC = [];
+    var currencyDC = [];
+    var currencyAC = [];
+    var currentPAC = [];
 
     $.each(responseRows, function(key, row) {
       var time = row.requesttime.substring(11, 16);
@@ -54,6 +59,7 @@ $(document).ready(function() {
       var kwhTot = 0;
       var idcTot = 0;
       var tempTot = 0;
+      var powerACTot = 0;
       $.each(devices, function(key, device) {
         $.each(device, function(k, v) {
           //Total data
@@ -63,13 +69,14 @@ $(document).ready(function() {
               kwhTot += v;
           } else if(k == "TEMPERATURE_MAXIMUM") {
               tempTot += v;
+          } else if(k == "P_AC") {
+              powerACTot += v;
           }
 
           var notI = (k == "device" || k.indexOf("U_AC_10_MIN_MEAN") !== -1
-              || k.indexOf("ENERGY_") !== -1 || k.indexOf("TEMPERATURE_MAXIMUM") !== -1 
-              || k.indexOf("P_") !== -1);
+              || k.indexOf("ENERGY_") !== -1 || k.indexOf("TEMPERATURE_MAXIMUM") !== -1);
           //VoltageDC value
-          if(!(notI || k.indexOf("U_AC") !== -1 || k.indexOf("I_") !== -1)) {
+          if(!(notI || k.indexOf("U_AC") !== -1 || k.indexOf("I_") !== -1 || k.indexOf("P_") !== -1)) {
             if(voltageDC[key + k] == undefined) {
               voltageDC[key + k] = {
                       label: key + k,
@@ -81,7 +88,7 @@ $(document).ready(function() {
             voltageDC[key + k].data.push(v);
           }
           //CurrencyDC
-          if(!(notI || k.indexOf("U_") !== -1 || k.indexOf("I_AC") !== -1)) {
+          if(!(notI || k.indexOf("U_") !== -1 || k.indexOf("I_AC") !== -1 || k.indexOf("P_") !== -1)) {
             if(currencyDC[key + k] == undefined) {
               currencyDC[key + k] = {
                       label: key + k,
@@ -94,7 +101,7 @@ $(document).ready(function() {
           }
 
           //currency AC
-          if(!(notI || k.indexOf("U_") !== -1 || k.indexOf("I_DC") !== -1)) {
+          if(!(notI || k.indexOf("U_") !== -1 || k.indexOf("I_DC") !== -1 || k.indexOf("P_") !== -1)) {
             if(currencyAC[key + k] == undefined) {
               currencyAC[key + k] = {
                       label: key + k,
@@ -105,11 +112,25 @@ $(document).ready(function() {
             }
             currencyAC[key + k].data.push(v);
           }
+
+          //current kw AC
+          if(!(notI || k.indexOf("U_") !== -1 || k.indexOf("I_") !== -1)) {
+            if(currentPAC[key + k] == undefined) {
+              currentPAC[key + k] = {
+                      label: key + k,
+                      data: [],
+                      backgroundColor: "rgba("+Math.floor((Math.random() * 255) + 1)+","+Math.floor((Math.random() * 255) + 1)+","+Math.floor((Math.random() * 255) + 1)+",0.4)",
+                      hidden: false
+                    };
+            }
+            currentPAC[key + k].data.push(v);
+          }
         });
       });
       kwh.push(kwhTot);
       iDC.push(idcTot);
       temperature.push(tempTot / devices.length);
+      powerAC.push(powerACTot / 1000);
     });
 
     var ctxdayChart = document.getElementById('dayChart').getContext('2d');
@@ -124,13 +145,17 @@ $(document).ready(function() {
           },{
             label: 'I_DC',
             data: iDC,
-            backgroundColor: "rgba(255,255,0,0.9)"
+            backgroundColor: "rgba(255,255,0,0.6)"
           },{
             label: 'Temperature',
             data: temperature,
             backgroundColor: "rgba(0,0,255,0.4)"
+          },{
+            label: 'kw_AC',
+            data: powerAC,
+            backgroundColor: "rgba(255,0,255,0.4)"
           }]
-        }
+        } 
       });
 
     var voltageDCVals = [];
@@ -175,10 +200,26 @@ $(document).ready(function() {
         datasets: currencyACVals
       }
     });
+
+    var currencyPowerACVals = [];
+    for (var key in currentPAC) {
+      let value = currentPAC[key];
+      currencyPowerACVals.push(value);
+    }
+
+    var ctxdayChartCurrencyPowerAC = document.getElementById('dayChartCurrencyPowerAC').getContext('2d');
+    var dayChartCurrencyPowerAC = new Chart(ctxdayChartCurrencyPowerAC, {
+      type: 'line',
+      data: {
+        labels: times,
+        datasets: currencyPowerACVals
+      }
+    });
+
     $("#dayChartVoltageDC").hide();
     $("#dayChartCurrencyDC").hide();
     $("#dayChartCurrencyAC").hide();
-
+    $("#dayChartCurrencyPowerAC").hide();
   }
 
   /** 
