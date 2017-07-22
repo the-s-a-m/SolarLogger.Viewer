@@ -153,7 +153,7 @@ $(document).ready(function() {
           },{
             label: 'kw_AC',
             data: powerAC,
-            backgroundColor: "rgba(255,0,255,0.4)"
+            backgroundColor: "rgba(255,0,0,0.9)"
           }]
         } 
       });
@@ -279,14 +279,35 @@ $(document).ready(function() {
     var times = [];
     var kwh = [];
     var kwhAverage = 0;
+    var kwhPerYear = [];
 
     $.each(responseRows, function(key, row) {
-      var time = row.requesttime;
+      var time = row.requesttime.substring(0, 10);
+      var year = row.requesttime.substring(0, 4);
+      var month = row.requesttime.substring(5, 7);
       times.push(time);
 
       var devices = row.devices;
-      var kwhTot = 0;
 
+      if(kwhPerYear[year] == undefined) {
+        var startData = [];
+        if(month != "01") {
+          var startMonth = parseInt(month);
+          startData = Array(startMonth - 1).fill(0);
+        }
+        var backgroundColor = "rgba("+Math.floor((Math.random() * 255) + 1)+","+Math.floor((Math.random() * 255) + 1)+","+Math.floor((Math.random() * 255) + 1)+",0.6)";
+        if(year == new Date().getFullYear()){
+          backgroundColor = "rgba(255,0,0,0.6)"
+        }
+        kwhPerYear[year] = {
+                label: year,
+                data: startData,
+                backgroundColor: backgroundColor,
+                hidden: false
+              };
+      }
+      
+      var kwhTot = 0;
       $.each(devices, function(key, device) {
         $.each(device, function(k, v) {
           if(k == "ENERGY_MONTH") {
@@ -294,27 +315,33 @@ $(document).ready(function() {
           } 
         });
       });
-      kwh.push(kwhTot);
+      kwhPerYear[year].data.push(kwhTot);
       kwhAverage += kwhTot;
     });
 
     kwhAverage /= times.length;
-    var kwhAverageArr = Array(times.length).fill(kwhAverage);
+    var kwhAverageArr = Array(12).fill(kwhAverage);
+
+    kwhPerYear["Average"] = {
+        label: 'Average',
+        data: kwhAverageArr,
+        backgroundColor: "rgba(0,0,200,0.2)",
+        hidden: true
+      }
+
+    var kwhPerYearVals = [];
+    for (var key in kwhPerYear) {
+      let value = kwhPerYear[key];
+      kwhPerYearVals.push(value);
+    }
+    var monthOfYear = Array.from(Array(12).keys()).map((_, i) => i + 1);
 
     var ctx = document.getElementById('yearChart').getContext('2d');
     var myChart = new Chart(ctx, {
-      type: 'line',
+      type: 'bar',
       data: {
-        labels: times,
-        datasets: [{
-          label: 'kwh',
-          data: kwh,
-          backgroundColor: "rgba(255,153,40,0.4)"
-        },{
-            label: 'Average',
-            data: kwhAverageArr,
-            backgroundColor: "rgba(0,0,200,0.1)"
-          }]
+        labels: monthOfYear,
+        datasets: kwhPerYearVals
       }
     });
   }

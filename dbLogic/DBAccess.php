@@ -97,7 +97,7 @@ class DBAccess {
         return $result;
     }
 
-    function getLast12MonthMax() {
+    function getMonthMax() {
         $conn = $this->getConnection();
         if($conn == null) { return; }
         $stmt = $conn->prepare("SELECT 
@@ -108,8 +108,25 @@ class DBAccess {
                     FROM loggerdata
                     GROUP BY DATE_FORMAT(created, '%Y-%m-01')
                 ) as t1
-                INNER JOIN loggerdata ON t1.external_id = loggerdata.idx
-                WHERE created >= now() - interval 365 day");
+                INNER JOIN loggerdata ON t1.external_id = loggerdata.idx");
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = null;
+        return $result;
+    }
+
+    function getLastYearsMax() {
+        $conn = $this->getConnection();
+        if($conn == null) { return; }
+        $stmt = $conn->prepare("SELECT 
+                t1.external_id, loggerdata.created, loggerdata.data
+                FROM 
+                (
+                    SELECT MAX(idx) AS external_id
+                    FROM loggerdata
+                    GROUP BY DATE_FORMAT(created, '%Y-12-01')
+                ) as t1
+                INNER JOIN loggerdata ON t1.external_id = loggerdata.idx");
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $conn = null;

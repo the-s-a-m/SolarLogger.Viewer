@@ -41,7 +41,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if("month" == $timerange) {
         $rows = $dbConnection->getLast30DaysMax();
     } else if("year" == $timerange) {
-        $rows = $dbConnection->getLast12MonthMax();
+        $rows = $dbConnection->getMonthMax();
     }
     $response = "[";
     for ($i = 0; $i < count($rows); $i++) {
