@@ -334,7 +334,6 @@ $(document).ready(function() {
       let value = kwhPerYear[key];
       kwhPerYearVals.push(value);
     }
-    //var monthOfYear = Array.from(Array(12).keys()).map((_, i) => i + 1);
     var monthOfYear = ['Jan.','Feb.','Mar.','Apr.','May','June','July','Aug.','Sept.','Oct.','Nov.','Dec.'];
 
     var ctx = document.getElementById('yearChart').getContext('2d');
@@ -350,43 +349,6 @@ $(document).ready(function() {
   httpGetAsync(currentDay, createDayStatistic);
   httpGetAsync(last30DaysMax, createlast30DaysStatistic);
   httpGetAsync(last12MonthMax, createlast12MonthStatistic);
-
-
-    /*
-    //Google chart to compare month (Will be activated later when other year data exist)
-    google.charts.load('current', {'packages':['bar']});
-    google.charts.setOnLoadCallback(drawChart1);
-
-    function drawChart1() {
-      var data = google.visualization.arrayToDataTable([
-        ['Month (in kw/h)', '2015', '2016', '2017'],
-        ['Jan.', 500 + 300 * Math.random(), 500 + 300 * Math.random(), 500 + 300 * Math.random()],
-        ['Feb.', 500 + 300 * Math.random(), 500 + 300 * Math.random(), 500 + 300 * Math.random()],
-        ['Mar.', 500 + 300 * Math.random(), 500 + 300 * Math.random(), 500 + 300 * Math.random()],
-        ['Apr.', 500 + 300 * Math.random(), 500 + 300 * Math.random(), 500 + 300 * Math.random()],
-        ['May', 500 + 300 * Math.random(), 500 + 300 * Math.random(), 500 + 300 * Math.random()],
-        ['June', 500 + 300 * Math.random(), 500 + 300 * Math.random(), 500 + 300 * Math.random()],
-        ['July', 500 + 300 * Math.random(), 500 + 300 * Math.random(), 0],
-        ['Aug.', 500 + 300 * Math.random(), 500 + 300 * Math.random(), 0],
-        ['Sept.', 500 + 300 * Math.random(), 500 + 300 * Math.random(), 0],
-        ['Oct.', 500 + 300 * Math.random(), 500 + 300 * Math.random(), 0],
-        ['Nov.', 500 + 300 * Math.random(), 500 + 300 * Math.random(), 0],
-        ['Dec.', 500 + 300 * Math.random(), 500 + 300 * Math.random(), 0]
-      ]);
-
-      var options = {
-        chart: {
-          title: '',
-          subtitle: ''
-        },
-        bars: 'vertical'
-      };
-
-      var chart = new google.charts.Bar(document.getElementById('barchart_material'));
-
-      chart.draw(data, google.charts.Bar.convertOptions(options));
-      
-    }*/
 });
 
 
