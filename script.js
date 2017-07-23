@@ -334,7 +334,8 @@ $(document).ready(function() {
       let value = kwhPerYear[key];
       kwhPerYearVals.push(value);
     }
-    var monthOfYear = Array.from(Array(12).keys()).map((_, i) => i + 1);
+    //var monthOfYear = Array.from(Array(12).keys()).map((_, i) => i + 1);
+    var monthOfYear = ['Jan.','Feb.','Mar.','Apr.','May','June','July','Aug.','Sept.','Oct.','Nov.','Dec.'];
 
     var ctx = document.getElementById('yearChart').getContext('2d');
     var myChart = new Chart(ctx, {
