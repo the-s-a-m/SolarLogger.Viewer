@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="SolarLogger - Live">
+    <meta name="author" content="">
+    <meta http-equiv="refresh" content="600">
+    <!--<link rel="icon" href="../../favicon.ico">-->
+
+    <title>SolarLogger - Live</title>
+
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="../lib/jquery-3.2.1.min.js"></script>
+    <script src="script.js"></script>
+
+  </head>
+
+  <body style="background-color: black">
+      <div class="container">
+        <div class="jumbotron text-center">
+            <h1 id="date">{date}</h1>
+            <h2 id="time">{time}</h2>
+        </div>
+        <div class="jumbotron text-center" style="background-color: rgba(0, 255, 0, 0.596); color: white">
+          <h2>kwh - Today</h2>
+          <h1 id="kwh-today">{kwh-today}</h1>
+        </div>
+        <div class="jumbotron text-center" style="background-color: rgba(255, 255, 0, 0.74); color: white">
+          <h2>kw AC</h2>
+          <h1 id="kw-ac">{kw-ac}</h1>
+        </div>
+        <div class="jumbotron text-center" style="background-color: blue; color: white">
+          <h2>Temperature</h2>
+          <h1 id="temperature">{temperature}</h1>
+        </div>
+        <div class="jumbotron text-center" style="background-color: rgba(0, 255, 0, 0.76); color: white">
+          <h2>kwh - Month</h2>
+          <h1 id="kwh-month">{kwh-month}</h1>
+        </div>
+        <div class="jumbotron text-center" style="background-color: lime; color: white">
+          <h2>kwh - Year</h2>
+          <h1 id="kwh-year">{kwh-year}</h1>
+        </div>
+        <div class="jumbotron text-center" style="background-color: black; color: white">
+          <h2>kwh - Total</h2>
+          <h1 id="kwh-total">{kwh-total}</h1>
+        </div>
+    </div>
+  </body>
+</html>
